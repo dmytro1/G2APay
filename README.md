@@ -17,7 +17,7 @@ Run `composer require davismiculis/g2a-pay` to install through **Composer**.
 Initialize G2APay library and set required paramenters:
 
 ```php
-use G2APay;
+use G2APay\G2APay;
 
 // Set required variables
 $hash = 'your-api-hash'; // Get it from G2APay
