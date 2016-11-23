@@ -22,8 +22,8 @@ use G2APay\G2APay;
 // Set required variables
 $hash = 'your-api-hash'; // Get it from G2APay
 $secret = 'your-api-secret'; // Get it from G2APay
-$success = '/callback/success/'; // URL for successful callback;
-$fail = '/callback/failed/'; // URL for failed callback;
+$success = 'http://example.com/success/'; // URL for successful callback;
+$fail = 'http://example.com/failed/'; // URL for failed callback;
 $order = 2234; // Choose your order id or invoice number, can be anything
 
 // Optional
