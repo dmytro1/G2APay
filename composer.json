@@ -1,17 +1,17 @@
 {
-	"name": "karer/g2a-pay-php",
-	"description": "G2APay PHP SDK for creating payments.",
+	"name": "davismiculis/g2apay",
+	"description": "G2APay PHP library for creating and sending payments.",
 	"type": "library",
 	"license": "MIT",
 	"authors": [
 		{
-			"name": "karer",
-			"email": "devkarer@gmail.com"
+			"name": "Davis Miculis",
+			"email": "mindzhulis@gmail.com"
 		}
 	],
 	"minimum-stability": "dev",
 	"require": {
-		"php": ">=5.3.0"
+		"php": ">=5.4.0"
 	},
 	"autoload": {
 		"psr-4": {
