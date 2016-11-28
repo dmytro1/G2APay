@@ -14,7 +14,7 @@ Run `composer require davismiculis/g2apay` to install through **Composer**.
 
 #### Initialization
 
-Initialize G2APay library and set required paramenters:
+Initialize G2APay library and set required parameters:
 
 ```php
 use G2APay\G2APay;
@@ -58,9 +58,9 @@ $payment->addItem($sku, $name, $quantity, $id, $price, $url, $extra, $type);
 You can chain methods, and add multiple items:
 
 ```php
-$payment->addItem(114, 'Game', 1, 114, 9.95, 'http://name.com/i/game/');
-        ->addItem(115, 'Gift', 2, 115, 1.50, 'http://name.com/i/gift/');
-        ->addItem(116, 'Key', 1, 116, 9.50, 'http://name.com/i/key/');
+$payment->addItem(114, 'Game', 1, 114, 9.95, 'http://example.com/i/game/')
+        ->addItem(115, 'Gift', 2, 115, 1.50, 'http://example.com/i/gift/')
+        ->addItem(116, 'Key', 1, 116, 9.50, 'http://example.com/i/key/');
 ```
 
 #### Finalizing Payment
