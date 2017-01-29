@@ -104,7 +104,7 @@ class G2APay
 		} else {
 			return [
 				'success' => false,
-				'message' => $result->msg
+				'message' => $result->message
 			];
 		}
 	}
