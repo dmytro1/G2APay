@@ -14,27 +14,33 @@ class G2APay
 	const API_URL = 'https://checkout.pay.g2a.com';
 	const API_TEST_URL = 'https://checkout.test.pay.g2a.com';
 
+	const CURRENCY_USD = 'USD';
+	const CURRENCY_EUR = 'EUR';
+
 	private $apiUrl;
+
 	private $apiHash;
 	private $apiSecret;
+	private $apiEmail;
+
 	private $urlSuccess;
 	private $urlFail;
-	private $orderId;
+
 	private $currency;
+
 	private $items = [];
 
-	public function __construct($apiHash, $apiSecret, $urlSuccess, $urlFail, $orderId, $currency = 'USD')
+	public function __construct(string $apiHash, string $apiSecret, string $urlSuccess = '', string $urlFail = '', $orderId, string $currency = 'USD')
 	{
 		$this->apiUrl = self::API_URL;
 		$this->apiHash = $apiHash;
 		$this->apiSecret = $apiSecret;
 		$this->urlSuccess = $urlSuccess;
 		$this->urlFail = $urlFail;
-		$this->orderId = $orderId;
 		$this->currency = $currency;
 	}
 
-	public function addItem($sku, $name, int $quantity, $id, float $price, $url, $extra = '', $type = '')
+	public function addItem($sku, string $name, int $quantity, $id, float $price, string $url = '', string $extra = '', string $type = '')
 	{
 		$this->items[] = [
 			'sku' => $sku,
@@ -58,7 +64,7 @@ class G2APay
 		return $this;
 	}
 
-	public function create($extra = array())
+	public function createOrder($orderId, array $extra = [])
 	{
 		// Temporary save api url, then reset to default
 		$url = $this->apiUrl;
@@ -70,15 +76,17 @@ class G2APay
 		// Prepare array with data to query G2A
 		$fields = array_merge([
 			'api_hash'		=> $this->apiHash,
-			'hash'			=> $this->calculateHash($amount),
-			'order_id'		=> $this->orderId,
+			'hash'			=> $this->calculateHash($orderId, $amount),
+			'order_id'		=> $orderId,
 			'amount'		=> $amount,
 			'currency'		=> $this->currency,
-			// 'description'	=> '',
-			// 'email'			=> '',
+			// 'description' => '',
+			// 'email'		 => '',
 			'url_failure'	=> $this->urlFail,
 			'url_ok'		=> $this->urlSuccess,
+			// 'cart_type'	 => '' // 'physical' or 'digital'
 			'items'			=> $this->items,
+			// 'addresses'	 => [],
 		], $extra);
 
 		// Request API server
@@ -109,8 +117,42 @@ class G2APay
 		}
 	}
 
-	private function calculateHash($amount)
+	public function checkTransaction(string $transactionCode = '')
 	{
-		return hash('sha256', $this->orderId.number_format($amount, 2).$this->currency.$this->apiSecret);
+		// Temporary save api url, then reset to default
+		$url = $this->apiUrl;
+		$this->apiUrl = self::API_URL;
+
+		$headers = [
+			'Authorization: '. $this->apiHash.';'.$this->calculateAuthHash(),
+		];
+
+		// Request API server
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url.'/rest/transactions/'.$transactionCode);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		// curl_setopt($ch, CURLOPT_POST, true);
+		// curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([]));
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+		$response = curl_exec($ch);
+		curl_close($ch);
+
+		// Convert response from JSON text to PHP object/array
+		$result = json_decode($response);
+
+		var_dump($result);
+	}
+
+	private function calculateHash($orderId, $amount)
+	{
+		return hash('sha256', $orderId.number_format($amount, 2).$this->currency.$this->apiSecret);
+	}
+
+	private function calculateAuthHash()
+	{
+		return hash('sha256', $this->apiHash.$this->apiEmail.$this->apiSecret);
 	}
 }
