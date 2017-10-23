@@ -69,10 +69,10 @@ Create payment and send it to G2APay:
 
 ```php
 // Create payment against G2APay
-$response = $payment->create();
+$response = $payment->createOrder();
 
 // Or if you want to create sandbox payment (for testing only)
-$response = $payment->test()->create();
+$response = $payment->test()->createOrder();
 ```
 
 There can be two responses:
