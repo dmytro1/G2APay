@@ -14,10 +14,14 @@ class G2APay
 	const API_URL = 'https://checkout.pay.g2a.com';
 	const API_TEST_URL = 'https://checkout.test.pay.g2a.com';
 
+	const REST_API_URL = 'https://www.pay.g2a.com';
+	const REST_API_TEST_URL = 'https://www.test.pay.g2a.com';
+
 	const CURRENCY_USD = 'USD';
 	const CURRENCY_EUR = 'EUR';
 
 	private $apiUrl;
+	private $restApiUrl;
 
 	private $apiHash;
 	private $apiSecret;
@@ -30,10 +34,12 @@ class G2APay
 
 	private $items = [];
 
-	public function __construct(string $apiHash, string $apiSecret, string $urlSuccess = '', string $urlFail = '', $orderId, string $currency = 'USD')
+	public function __construct(string $apiHash, string $apiSecret, string $apiEmail, string $urlSuccess = '', string $urlFail = '', string $currency = 'USD')
 	{
 		$this->apiUrl = self::API_URL;
+		$this->restApiUrl = self::REST_API_URL;
 		$this->apiHash = $apiHash;
+		$this->apiEmail = $apiEmail;
 		$this->apiSecret = $apiSecret;
 		$this->urlSuccess = $urlSuccess;
 		$this->urlFail = $urlFail;
@@ -60,6 +66,7 @@ class G2APay
 	public function test()
 	{
 		$this->apiUrl = self::API_TEST_URL;
+		$this->restApiUrl = self::REST_API_TEST_URL;
 
 		return $this;
 	}
@@ -119,9 +126,9 @@ class G2APay
 
 	public function checkTransaction(string $transactionCode = '')
 	{
-		// Temporary save api url, then reset to default
-		$url = $this->apiUrl;
-		$this->apiUrl = self::API_URL;
+		// Temporary save rest api url, then reset to default
+		$url = $this->restApiUrl;
+		$this->restApiUrl = self::REST_API_URL;
 
 		$headers = [
 			'Authorization: '. $this->apiHash.';'.$this->calculateAuthHash(),
@@ -143,7 +150,7 @@ class G2APay
 		// Convert response from JSON text to PHP object/array
 		$result = json_decode($response);
 
-		var_dump($result);
+		return $result;
 	}
 
 	private function calculateHash($orderId, $amount)
