@@ -69,11 +69,13 @@ $payment->addItem(114, 'Game', 1, 114, 9.95, 'http://example.com/i/game/')
 Create payment and send it to G2APay:
 
 ```php
+$orderId = 1; // Generate or save in your database
+$extras = []; // Optional extras passed to order (Please refer G2APay docs)
 // Create payment against G2APay
-$response = $payment->createOrder();
+$response = $payment->createOrder($orderId, $extras);
 
 // Or if you want to create sandbox payment (for testing only)
-$response = $payment->test()->createOrder();
+$response = $payment->test()->createOrder($orderId, $extras);
 ```
 
 There can be two responses:
