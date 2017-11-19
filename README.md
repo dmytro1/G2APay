@@ -22,6 +22,7 @@ use G2APay\G2APay;
 // Set required variables
 $hash = 'your-api-hash'; // Get it from G2APay
 $secret = 'your-api-secret'; // Get it from G2APay
+$email = 'mail@example.com'; // Your G2APay store email
 $success = 'http://example.com/success/'; // URL for successful callback;
 $fail = 'http://example.com/failed/'; // URL for failed callback;
 $order = 2234; // Choose your order id or invoice number, can be anything
@@ -30,7 +31,7 @@ $order = 2234; // Choose your order id or invoice number, can be anything
 $currency = 'USD'; // Pass currency, if no given will use "USD"
 
 // Create payment instance
-$payment = new G2APay($hash, $secret, $success, $fail, $order, $currency);
+$payment = new G2APay($hash, $secret, $email, $success, $fail, $order, $currency);
 ```
 
 #### Adding Items
